@@ -1,11 +1,15 @@
 const axios = require("axios")
+const URL_PREFIX = "http://localhost:3001"
 
 const API = {
     login:function(userData){
-        return axios.post("http://localhost:3001/login",userData)
+        return axios.post(`${URL_PREFIX}/login`,userData)
+    },
+    signup:function(userData){
+        return axios.post(`${URL_PREFIX}/signup`,userData)
     },
     getProfile: function(token){
-        return axios.get("http://localhost:3001/profile",{
+        return axios.get(`${URL_PREFIX}/profile`,{
             headers:{
                 authorization:`Bearer ${token}`
             }
