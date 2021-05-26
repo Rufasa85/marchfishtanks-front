@@ -15,6 +15,19 @@ const API = {
                 authorization:`Bearer ${token}`
             }
         })
+    },
+    getAllTanks:function(){
+        return axios.get(`${URL_PREFIX}/api/tanks`);
+    },
+    getOneTank:function(id){
+        return axios.get(`${URL_PREFIX}/api/tanks/${id}`);
+    },
+    createTank:function(data,token){
+        return axios.post(`${URL_PREFIX}/api/tanks/`,data,{
+            headers:{
+                authorization:`Bearer ${token}`
+            }
+        });
     }
 }
 

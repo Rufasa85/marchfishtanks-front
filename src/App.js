@@ -2,6 +2,11 @@ import React, {useEffect,useState} from "react";
 import './App.css';
 import API from "./utils/API";
 
+import {BrowserRouter as Router,Switch,Route} from "react-router-dom"
+import Home from "./pages/Home";
+import NavBar from "./components/NavBar";
+import SingleTank from "./pages/SingleTank";
+
 function App() {
   const [formState,setFormState] = useState({
     email:"",
@@ -16,7 +21,6 @@ function App() {
   const [userState,setUserState] = useState({
     token:"",
     user:{
-
     }
   })
 
@@ -43,6 +47,7 @@ function App() {
     } else {
       console.log("no token provided")
     }
+    
   },[])
 
   const handleFormSubmit = e =>{
@@ -56,6 +61,7 @@ function App() {
         user:{
           email:res.data.user.email,
           name:res.data.user.name,
+          id:res.data.user.id
         }
       })
     }).catch(err=>{
@@ -84,6 +90,7 @@ function App() {
         user:{
           email:res.data.user.email,
           name:res.data.user.name,
+          id:res.data.user.id
         }
       })
     }).catch(err=>{
@@ -110,26 +117,28 @@ function App() {
     localStorage.removeItem("token")
   }
   return (
+    
+
     <div>
-      <h1>welcome!</h1>
-      {!userState.user?.name ? (<div>
-        <form onSubmit = {handleFormSubmit}> 
-        <input name="email" value = {formState.email} onChange={(e)=>setFormState({...formState,email:e.target.value})}/>
-        <input name="password"  type="password" value = {formState.password} onChange={(e)=>setFormState({...formState,password:e.target.value})}/>
-        <input type="submit" value="login"/>
-      </form>
-      <form onSubmit = {handleSignupFormSubmit}> 
-        <input name="email" value = {signupFormState.email} onChange={(e)=>setSignupFormState({...signupFormState,email:e.target.value})}/>
-        <input name="name" value = {signupFormState.name} onChange={(e)=>setSignupFormState({...signupFormState,name:e.target.value})}/>
-        <input name="password"  type="password" value = {signupFormState.password} onChange={(e)=>setSignupFormState({...signupFormState,password:e.target.value})}/>
-        <input type="submit" value="signup"/>
-      </form>
-      </div>):(
-        <div>
-      <h1>Welcome back, {userState.user.name}</h1>
-      <button onClick={handleLogout}>Logout</button>
-      </div>
-      )}
+      <Router>
+        <NavBar user={userState.user} 
+        handleFormSubmit={handleFormSubmit} 
+        formState={formState} 
+        setFormState={setFormState} 
+        signupFormState={signupFormState} 
+        setSignupFormState={setSignupFormState}
+        handleSignupFormSubmit={handleSignupFormSubmit}
+        handleLogout={handleLogout}
+        />
+        <Switch>
+          <Route exact path ="/">
+            <Home user={userState.user} token={userState.token}/>
+          </Route>
+          <Route exact path ="/tanks/:id">
+            <SingleTank/>
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
