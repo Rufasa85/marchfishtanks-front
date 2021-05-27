@@ -135,7 +135,7 @@ function App() {
             <Home user={userState.user} token={userState.token}/>
           </Route>
           <Route exact path ="/tanks/:id">
-            <SingleTank/>
+            <SingleTank token={userState.token}/>
           </Route>
         </Switch>
       </Router>
